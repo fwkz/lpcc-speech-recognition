@@ -2,51 +2,19 @@ clc;
 clear;
 close all;
 
-% declare variables
-data = [];
+% Declare variables.
 lpc_coeff = [];
-frame_length = 512; 
-r_offset = 0;
-l_offset = frame_length - r_offset;
+FILENAME = 'mama.wav';
 
-% checking if r_offset > frame_length
-if r_offset >= frame_length
-    throw(MException('MATLAB:ValueError', 'Offset value should be greater than frame length!'));
-end
+% Load signal.
+[signal, fs, x] = wavread(['samples/' FILENAME]);
 
-filename = 'mama.wav';
+% Delete one of the stereo channel and transpose.
+mono_signal = signal(:, 1);
 
-% load signal
-[signal, fs, x] = wavread(['samples/' filename]);
+% Process signal into frames.
+framed_signal = frames(mono_signal, 512, 0);
 
-% delete one of the stereo channel and transpose
-try
-    signal(:, 2) = [];
-catch err
-    %pass
-end
-
-% calculate number of frames
-frames = floor(length(signal) / l_offset);
- 
-% coords of matrix slice
-start_point = 1;
-end_point = frame_length;
-
-% main computing loop
-for column_number = 1:1:frames
-    try
-        frame = signal(start_point:end_point);
-    catch err
-        break
-    end
-    
-    % computing frames matrix
-    data = [data frame];
-    
-    %lpc coefficients
-    lpc_coeff(:, column_number) = lpc(frame, 18)';
-    
-    start_point = start_point + l_offset;
-    end_point = end_point + l_offset;
+for column_number = 1:1:size(framed_signal, 2)
+    lpc_coeff = [lpc_coeff lpc(framed_signal(:, column_number), 18)'];
 end
