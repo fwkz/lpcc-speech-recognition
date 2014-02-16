@@ -7,10 +7,10 @@ function [ models ] = learn_models(models_dir)
 
     for model = 1:1:length(models_dir)
         FILENAME = models_dir(model).name(1:end-4);
-%         disp(['Learning model: ' FILENAME])
+        % disp(['Learning model: ' FILENAME])
 
         % Load signal.
-        [signal, fs, x] = wavread(['samples/' FILENAME]);
+        [signal, fs, x] = wavread(['models/' FILENAME]);
 
         % Delete one of the stereo channel and transpose.
         mono_signal = signal(:, 1);
@@ -19,10 +19,10 @@ function [ models ] = learn_models(models_dir)
         framed_signal = frames(mono_signal, 512, 0);
 
         % Compute LPC coefficients.
-        lpc_coeff = lpc_(framed_signal, 18);
+        lpc_coeff = lpc_(framed_signal, 14);
 
         % Compute LPCC coefficients
-        lpcc_coeff = lpcc(lpc_coeff, framed_signal);
+        lpcc_coeff = lpcc(lpc_coeff, 6);
 
         models(FILENAME) = lpcc_coeff;
     end
