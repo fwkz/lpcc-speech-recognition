@@ -1,4 +1,6 @@
 function [data] = frames(signal, frame_length, offset)
+    % Divide signal into frames
+
     % declare variables
     data = [];
     r_offset = offset;

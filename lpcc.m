@@ -1,4 +1,6 @@
 function [ lpcc_coeff ] = lpcc( lpc_coeff, framed_signal )
+    % Compute LPCC coefficients from LPC.
+    
     lpcc_coeff = [0];
     G = 3;
     acc = 0;
