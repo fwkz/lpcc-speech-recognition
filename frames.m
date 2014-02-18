@@ -1,4 +1,4 @@
-function [data] = frames(signal, frame_length, offset)
+function [data] = frames(signal, frame_length, offset, silence_treshold)
     % Divide signal into frames
 
     % declare variables
@@ -25,10 +25,11 @@ function [data] = frames(signal, frame_length, offset)
         catch err
             break
         end
-
-        % computing frames matrix
-        data = [data frame];
-
+        
+        if sum(frame.^2) > silence_treshold
+            data = [data frame];
+        end
+        
         start_point = start_point + l_offset;
         end_point = end_point + l_offset;
     end

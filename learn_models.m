@@ -1,29 +1,15 @@
-function [ models ] = learn_models(models_dir)
+function [ models ] = learn_models(models_path)
     % Compute word models for comparing.
-    
-    models_dir = dir([models_dir '/*.wav']);
+    models_dir = dir([models_path '/*.wav']);
 
     models = containers.Map();
 
     for model = 1:1:length(models_dir)
-        FILENAME = models_dir(model).name(1:end-4);
+        FILENAME = models_dir(model).name;%(1:end-4)
         % disp(['Learning model: ' FILENAME])
+        
+        lpcc_coeff = process_file([models_path '/' FILENAME]);
 
-        % Load signal.
-        [signal, fs, x] = wavread(['models/' FILENAME]);
-
-        % Delete one of the stereo channel and transpose.
-        mono_signal = signal(:, 1);
-
-        % Process signal into frames.
-        framed_signal = frames(mono_signal, 512, 0);
-
-        % Compute LPC coefficients.
-        lpc_coeff = lpc_(framed_signal, 14);
-
-        % Compute LPCC coefficients
-        lpcc_coeff = lpcc(lpc_coeff, 6);
-
-        models(FILENAME) = lpcc_coeff;
+        models(FILENAME(1:end-4)) = lpcc_coeff;
     end
 end
