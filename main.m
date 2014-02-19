@@ -6,7 +6,7 @@ close all;
 models = learn_models('models');
 
 % Declare variables.
-PATH = 'samples/marmolada.wav';
+PATH = 'samples/kontrabas9.wav';
 
 lpcc_coeff = process_file(PATH);
 

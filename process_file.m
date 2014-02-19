@@ -7,7 +7,7 @@ function [ lpcc_coeff ] = process_file( sample_path )
 mono_signal = signal(:, 1);
 
 % Process signal into frames.
-framed_signal = frames(mono_signal, 128, 0, 10);
+framed_signal = frames(mono_signal, 128, 0, 5);
 
 % Compute LPC coefficients.
 lpc_coeff = lpc_(framed_signal, 14);
